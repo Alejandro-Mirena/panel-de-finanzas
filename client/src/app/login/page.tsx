@@ -36,7 +36,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold mb-2">Bienvenido de vuelta</h1>
           <p className="text-muted text-sm">
-            Iniciá sesión para acceder a tu panel
+            Inicia sesión para acceder a tu panel
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
+              className="w-full py-2.5 cursor-pointer bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
             >
               Iniciar sesión
             </button>

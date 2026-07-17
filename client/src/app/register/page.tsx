@@ -41,9 +41,9 @@ export default function RegisterPage() {
 
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold mb-2">Creá tu cuenta</h1>
+          <h1 className="text-2xl font-bold mb-2">Crea tu cuenta</h1>
           <p className="text-muted text-sm">
-            Empezá a organizar tus finanzas en minutos
+            Empieza a organizar tus finanzas en minutos
           </p>
         </div>
 
@@ -115,7 +115,7 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
+              className="w-full py-2.5 cursor-pointer bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
             >
               Crear cuenta
             </button>
