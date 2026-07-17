@@ -33,7 +33,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12 relative">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/15 rounded-full blur-[120px]" />
         <div className="absolute bottom-1/3 left-1/4 w-64 h-64 bg-purple-500/15 rounded-full blur-[120px]" />
@@ -41,12 +41,6 @@ export default function RegisterPage() {
 
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-white font-bold">$</span>
-            </div>
-            <span className="font-semibold text-xl">Finanzas</span>
-          </Link>
           <h1 className="text-2xl font-bold mb-2">Creá tu cuenta</h1>
           <p className="text-muted text-sm">
             Empezá a organizar tus finanzas en minutos
@@ -129,7 +123,7 @@ export default function RegisterPage() {
 
           <div className="mt-6 pt-5 border-t border-card-border text-center">
             <p className="text-muted text-sm">
-              ¿Ya tienes cuenta?{" "}
+              ¿Ya tenés cuenta?{" "}
               <Link
                 href="/login"
                 className="text-primary hover:text-primary-light transition-colors font-medium"

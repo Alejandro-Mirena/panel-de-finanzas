@@ -63,7 +63,7 @@ export default function Dashboard() {
     .reduce((acc, t) => acc + t.amount, 0);
 
   return (
-    <div className="min-h-screen bg-background pt-20 px-4 sm:px-6">
+    <div className="min-h-screen bg-background px-4 sm:px-6 py-8">
       <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
         <h2 className="text-xl sm:text-2xl font-bold">Dashboard</h2>
 
