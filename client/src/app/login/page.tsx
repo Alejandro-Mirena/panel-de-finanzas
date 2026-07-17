@@ -54,7 +54,7 @@ export default function LoginPage() {
                 type="email"
                 {...register("email")}
                 placeholder="tu@email.com"
-                className="w-full px-4 py-2.5 bg-background border border-card-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                className="w-full px-4 py-2.5 bg-background border border-card-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
               />
               {errors.email && (
                 <p className="text-red-400 text-xs mt-1">
@@ -71,7 +71,7 @@ export default function LoginPage() {
                 type="password"
                 {...register("password")}
                 placeholder="••••••••"
-                className="w-full px-4 py-2.5 bg-background border border-card-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                className="w-full px-4 py-2.5 bg-background border border-card-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
               />
               {errors.password && (
                 <p className="text-red-400 text-xs mt-1">
@@ -90,7 +90,7 @@ export default function LoginPage() {
 
           <div className="mt-6 pt-5 border-t border-card-border text-center">
             <p className="text-muted text-sm">
-              ¿No tenés cuenta?{" "}
+              ¿No tienes cuenta?{" "}
               <Link
                 href="/register"
                 className="text-primary hover:text-primary-light transition-colors font-medium"

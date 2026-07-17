@@ -37,7 +37,7 @@ export default function Pricing() {
   return (
     <section id="pricing" className="py-20 sm:py-32 relative">
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-primary/10 rounded-full blur-[150px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-75 sm:w-150 h-75 sm:h-150 bg-primary/10 rounded-full blur-[150px]" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
