@@ -123,7 +123,7 @@ export default function RegisterPage() {
 
           <div className="mt-6 pt-5 border-t border-card-border text-center">
             <p className="text-muted text-sm">
-              ¿Ya tenés cuenta?{" "}
+              ¿Ya tienes cuenta?{" "}
               <Link
                 href="/login"
                 className="text-primary hover:text-primary-light transition-colors font-medium"

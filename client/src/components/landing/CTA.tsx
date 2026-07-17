@@ -15,7 +15,7 @@ export default function CTA() {
             </h2>
             <p className="text-muted text-sm sm:text-lg max-w-xl mx-auto mb-6 sm:mb-8">
               Empieza a organizar tus finanzas hoy. Es gratis, es simple, y en
-              minutos vas a entender en dónde va tu dinero.
+              minutos vas a entender donde va tu dinero.
             </p>
             <a
               href="/register"

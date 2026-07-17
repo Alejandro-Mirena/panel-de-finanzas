@@ -10,7 +10,7 @@ const testimonials = [
   {
     name: "Neicle Hidalgo",
     role: "Estudiante universitaria",
-    text: "Por fin puedo ver en dónde se me va el dinero cada mes. Las categorías con colores hacen que todo sea mucho más claro.",
+    text: "Por fin puedo ver donde se me va el dinero cada mes. Las categorías con colores hacen que todo sea mucho más claro.",
     avatar: "👩‍🎓",
   },
   {

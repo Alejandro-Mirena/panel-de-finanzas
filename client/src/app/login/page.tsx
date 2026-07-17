@@ -84,7 +84,7 @@ export default function LoginPage() {
 
           <div className="mt-6 pt-5 border-t border-card-border text-center">
             <p className="text-muted text-sm">
-              ¿No tenés cuenta?{" "}
+              ¿No tienes cuenta?{" "}
               <Link
                 href="/register"
                 className="text-primary hover:text-primary-light transition-colors font-medium"

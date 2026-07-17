@@ -47,8 +47,8 @@ export default function Pricing() {
             Simple y <span className="gradient-text">transparente.</span>
           </h2>
           <p className="text-muted text-base sm:text-lg max-w-xl mx-auto">
-            Sin costos ocultos. Elegí el plan que mejor se adapte a lo que
-            necesitás.
+            Sin costos ocultos. Elige el plan que mejor se adapte a lo que
+            necesitas.
           </p>
         </div>
 

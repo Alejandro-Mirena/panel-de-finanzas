@@ -23,7 +23,7 @@ const features = [
     icon: "🔍",
     title: "Filtros por fecha",
     description:
-      "Busca transacciones por rango de fechas, categoría o monto. Encontrá lo que necesitás al instante.",
+      "Busca transacciones por rango de fechas, categoría o monto. Encuentra lo que necesitas al instante.",
   },
   {
     icon: "🔒",
