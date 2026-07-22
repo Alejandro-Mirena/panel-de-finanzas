@@ -20,20 +20,20 @@ export default function AboutPage() {
         <div className="space-y-16">
           <section>
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-              Nuestra mision
+              La mision
             </h2>
             <p className="text-muted leading-relaxed">
-              Nacimos de una frustration simple: las apps de finanzas son
-              demasiado complicadas o demasiado basicas. Queriamos crear algo en
-              el medio: un dashboard limpio, rapido y util, donde cada persona
-              pueda ver exactamente donde va su dinero sin necesitar un titulo
-              en contabilidad.
+              Jesus Alejandro nacio de una frustration simple: las apps de
+              finanzas son demasiado complicadas o demasiado basicas. Quiso
+              crear algo en el medio: un dashboard limpio, rapido y util, donde
+              cada persona pueda ver exactamente donde va su dinero sin
+              necesitar un titulo en contabilidad.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-              Lo que nos mueve
+              Lo que lo mueve
             </h2>
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="p-6 rounded-2xl bg-card border border-card-border">
@@ -56,8 +56,8 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">🎨</div>
                 <h3 className="font-semibold mb-2">Diseño</h3>
                 <p className="text-muted text-sm leading-relaxed">
-                  Creemos que las cosas bien hechas se disfrutan mas. Por eso
-                  invertimos en un diseño que hace que usar la app sea una
+                  Cree que las cosas bien hechas se disfrutan mas. Por eso
+                  invierte en un diseño que hace que usar la app sea una
                   experiencia agradable.
                 </p>
               </div>
@@ -65,7 +65,7 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">🔒</div>
                 <h3 className="font-semibold mb-2">Privacidad</h3>
                 <p className="text-muted text-sm leading-relaxed">
-                  No conectamos con bancos ni APIs externas. Vos decides que
+                  No se conecta con bancos ni APIs externas. Vos decides que
                   ingresas. Tus finanzas son solo tuyas.
                 </p>
               </div>
@@ -73,9 +73,11 @@ export default function AboutPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Detras del proyecto</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+              Detras del proyecto
+            </h2>
             <p className="text-muted leading-relaxed mb-6">
-              Finanzas es un proyecto personal creado por Jesus Alejandro.
+              Finanzas es un proyecto personal creado por Alejandro Mirena.
               Nacio de la necesidad de tener una herramienta simple, bonita y
               funcional para manejar finanzas personales sin depender de apps
               complicadas o conectarse a bancos.
@@ -85,12 +87,14 @@ export default function AboutPage() {
                 <div className="w-20 h-20 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-4xl mb-4">
                   👨‍💻
                 </div>
-                <p className="font-semibold text-base mb-1">Jesus Alejandro</p>
-                <p className="text-primary text-sm mb-3">Creador y desarrollador</p>
+                <p className="font-semibold text-base mb-1">Alejandro Mirena</p>
+                <p className="text-primary text-sm mb-3">
+                  Creador y desarrollador
+                </p>
                 <p className="text-muted text-xs leading-relaxed">
-                  Disenador, desarrollador y usuario de la propia app.
-                  Cada funcion esta pensada desde la experiencia real de
-                  usarla todos los dias.
+                  Disenador, desarrollador y usuario de la propia app. Cada
+                  funcion esta pensada desde la experiencia real de usarla todos
+                  los dias.
                 </p>
               </div>
             </div>
