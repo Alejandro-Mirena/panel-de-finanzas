@@ -19,15 +19,13 @@ export default function AboutPage() {
 
         <div className="space-y-16">
           <section>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-              La mision
-            </h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">La mision</h2>
             <p className="text-muted leading-relaxed">
-              Jesus Alejandro nacio de una frustration simple: las apps de
-              finanzas son demasiado complicadas o demasiado basicas. Quiso
-              crear algo en el medio: un dashboard limpio, rapido y util, donde
-              cada persona pueda ver exactamente donde va su dinero sin
-              necesitar un titulo en contabilidad.
+              Nacio de una frustration simple: las apps de finanzas son
+              demasiado complicadas o demasiado basicas. Quiso crear algo en el
+              medio: un dashboard limpio, rapido y util, donde cada persona
+              pueda ver exactamente donde va su dinero sin necesitar un titulo
+              en contabilidad.
             </p>
           </section>
 
@@ -48,7 +46,7 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">⚡</div>
                 <h3 className="font-semibold mb-2">Simplicidad</h3>
                 <p className="text-muted text-sm leading-relaxed">
-                  Cada funcion esta disenada para hacer tu vida mas facil, no
+                  Cada funcion esta diseñada para hacer tu vida mas facil, no
                   mas complicada. Si algo no suma, no esta.
                 </p>
               </div>
@@ -65,7 +63,7 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">🔒</div>
                 <h3 className="font-semibold mb-2">Privacidad</h3>
                 <p className="text-muted text-sm leading-relaxed">
-                  No se conecta con bancos ni APIs externas. Vos decides que
+                  No se conecta con bancos ni APIs externas. Tu decides que
                   ingresas. Tus finanzas son solo tuyas.
                 </p>
               </div>
@@ -92,9 +90,8 @@ export default function AboutPage() {
                   Creador y desarrollador
                 </p>
                 <p className="text-muted text-xs leading-relaxed">
-                  Disenador, desarrollador y usuario de la propia app. Cada
-                  funcion esta pensada desde la experiencia real de usarla todos
-                  los dias.
+                  Desarrollador y usuario de la propia app. Cada funcion esta
+                  pensada desde la experiencia real de usarla todos los dias.
                 </p>
               </div>
             </div>

@@ -5,7 +5,7 @@ const faqs = [
   },
   {
     q: "Mis datos estan seguros?",
-    a: "Si. No conectamos con bancos ni APIs externas. Toda la informacion la ingresas vos y se almacena de forma segura. Tus datos son 100% tuyos.",
+    a: "Si. No conectamos con bancos ni APIs externas. Toda la informacion la ingresas tú y se almacena de forma segura. Tus datos son 100% tuyos.",
   },
   {
     q: "Puedo exportar mis datos?",
@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: "Funciona en celular?",
-    a: "Si. La app esta disenada para funcionar perfectamente en celulares, tablets y computadoras. Solo necesitas un navegador.",
+    a: "Si. La app esta diseñada para funcionar perfectamente en celulares, tablets y computadoras. Solo necesitas un navegador.",
   },
   {
     q: "Cuanto cuesta?",
@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Puedo cancelar en cualquier momento?",
-    a: "Si. No hay contratos ni penalizaciones. Cancelas cuando quieras y seguis teniendo acceso hasta que termine el periodo pagado.",
+    a: "Si. No hay contratos ni penalizaciones. Cancelas cuando quieras y sigues teniendo acceso hasta que termine el periodo pagado.",
   },
 ];
 
@@ -35,8 +35,8 @@ export default function SupportPage() {
             Estamos para <span className="gradient-text">ayudarte.</span>
           </h1>
           <p className="text-muted text-base sm:text-lg max-w-xl mx-auto">
-            Encontrá respuestas a las preguntas mas frecuentes o
-            contactanos directamente.
+            Encuentra respuestas a las preguntas mas frecuentes o contactanos
+            directamente.
           </p>
         </div>
 
@@ -46,8 +46,12 @@ export default function SupportPage() {
               key={faq.q}
               className="p-5 sm:p-6 rounded-2xl bg-card border border-card-border"
             >
-              <h3 className="font-semibold text-sm sm:text-base mb-2">{faq.q}</h3>
-              <p className="text-muted text-xs sm:text-sm leading-relaxed">{faq.a}</p>
+              <h3 className="font-semibold text-sm sm:text-base mb-2">
+                {faq.q}
+              </h3>
+              <p className="text-muted text-xs sm:text-sm leading-relaxed">
+                {faq.a}
+              </p>
             </div>
           ))}
         </div>
@@ -57,8 +61,8 @@ export default function SupportPage() {
             No encontraste lo que buscabas?
           </h2>
           <p className="text-muted text-sm mb-6 max-w-md mx-auto">
-            Escribinos y te respondemos lo antes posible. Estamos
-            comprometidos a ayudarte.
+            Escríbenos y te respondemos lo antes posible. Estamos comprometidos
+            a ayudarte.
           </p>
           <a
             href="mailto:soporte@finanzas.app"
