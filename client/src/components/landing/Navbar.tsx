@@ -17,13 +17,13 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-sm text-muted hover:text-foreground transition-colors">
+          <a href="/#features" className="text-sm text-muted hover:text-foreground transition-colors">
             Funciones
           </a>
-          <a href="#pricing" className="text-sm text-muted hover:text-foreground transition-colors">
+          <a href="/#pricing" className="text-sm text-muted hover:text-foreground transition-colors">
             Precios
           </a>
-          <a href="#testimonials" className="text-sm text-muted hover:text-foreground transition-colors">
+          <a href="/#testimonials" className="text-sm text-muted hover:text-foreground transition-colors">
             Opiniones
           </a>
         </div>
@@ -57,13 +57,13 @@ export default function Navbar() {
       {menuOpen && (
         <div className="md:hidden border-t border-card-border bg-background/95 backdrop-blur-xl">
           <div className="px-4 py-4 space-y-3">
-            <a href="#features" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
+            <a href="/#features" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
               Funciones
             </a>
-            <a href="#pricing" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
+            <a href="/#pricing" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
               Precios
             </a>
-            <a href="#testimonials" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
+            <a href="/#testimonials" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
               Opiniones
             </a>
             <div className="pt-3 border-t border-card-border space-y-3">
