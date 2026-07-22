@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="border-t border-card-border py-10 sm:py-16">
@@ -14,7 +16,7 @@ export default function Footer() {
             </div>
             <p className="text-xs sm:text-sm text-muted leading-relaxed">
               Tu dinero, bellamente organizado. Panel de finanzas personales
-              diseñado para que todo tenga sentido.
+              disenado para que todo tenga sentido.
             </p>
           </div>
 
@@ -22,40 +24,40 @@ export default function Footer() {
             <h4 className="font-medium text-xs sm:text-sm mb-3 sm:mb-4">Producto</h4>
             <ul className="space-y-1.5 sm:space-y-2">
               <li>
-                <a href="#features" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                <a href="/#features" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
                   Funciones
                 </a>
               </li>
               <li>
-                <a href="#pricing" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                <a href="/#pricing" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
                   Precios
                 </a>
               </li>
               <li>
-                <a href="#" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                <Link href="/dashboard" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
                   Dashboard
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-medium text-xs sm:text-sm mb-3 sm:mb-4">Compañía</h4>
+            <h4 className="font-medium text-xs sm:text-sm mb-3 sm:mb-4">Compania</h4>
             <ul className="space-y-1.5 sm:space-y-2">
               <li>
-                <a href="#" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                <Link href="/about" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
                   Sobre nosotros
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                <Link href="/blog" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
                   Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                <Link href="/support" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
                   Soporte
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -64,14 +66,14 @@ export default function Footer() {
             <h4 className="font-medium text-xs sm:text-sm mb-3 sm:mb-4">Legal</h4>
             <ul className="space-y-1.5 sm:space-y-2">
               <li>
-                <a href="#" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                <Link href="/privacy" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
                   Privacidad
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
-                  Términos
-                </a>
+                <Link href="/terms" className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors">
+                  Terminos
+                </Link>
               </li>
             </ul>
           </div>
