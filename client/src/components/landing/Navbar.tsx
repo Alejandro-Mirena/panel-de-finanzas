@@ -1,10 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/auth";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const { user, token, logout, fetchUser } = useAuthStore();
+
+  useEffect(() => {
+    if (token && !user) {
+      fetchUser();
+    }
+  }, [token, user, fetchUser]);
+
+  const handleLogout = () => {
+    logout();
+    setMenuOpen(false);
+    router.push("/");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-card-border">
@@ -29,15 +45,36 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/login" className="text-sm text-muted hover:text-foreground transition-colors">
-            Iniciar sesion
-          </Link>
-          <Link href="/register" className="text-sm bg-primary hover:bg-primary-light text-white px-4 py-2 rounded-lg transition-colors">
-            Comenzar gratis
-          </Link>
-          <Link href="/dashboard" className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm hover:bg-primary/30 transition-colors" title="Mi perfil">
-            👨‍💻
-          </Link>
+          {user ? (
+            <>
+              <Link href="/dashboard" className="text-sm text-muted hover:text-foreground transition-colors">
+                Dashboard
+              </Link>
+              <div className="flex items-center gap-3">
+                <Link href="/dashboard" className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors">
+                  <span className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                  {user.name}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-sm text-muted hover:text-red-400 transition-colors cursor-pointer"
+                >
+                  Salir
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm text-muted hover:text-foreground transition-colors">
+                Iniciar sesion
+              </Link>
+              <Link href="/register" className="text-sm bg-primary hover:bg-primary-light text-white px-4 py-2 rounded-lg transition-colors">
+                Comenzar gratis
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -70,16 +107,34 @@ export default function Navbar() {
               Opiniones
             </a>
             <div className="pt-3 border-t border-card-border space-y-3">
-              <Link href="/login" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
-                Iniciar sesion
-              </Link>
-              <Link href="/register" onClick={() => setMenuOpen(false)} className="block text-sm bg-primary hover:bg-primary-light text-white px-4 py-2.5 rounded-lg transition-colors text-center">
-                Comenzar gratis
-              </Link>
-              <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors py-2">
-                <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs">👨‍💻</span>
-                Mi perfil
-              </Link>
+              {user ? (
+                <>
+                  <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors py-2">
+                    <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs">
+                      {user.name.charAt(0).toUpperCase()}
+                    </span>
+                    {user.name}
+                  </Link>
+                  <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left text-sm text-red-400 hover:text-red-300 transition-colors py-2 cursor-pointer"
+                  >
+                    Cerrar sesion
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
+                    Iniciar sesion
+                  </Link>
+                  <Link href="/register" onClick={() => setMenuOpen(false)} className="block text-sm bg-primary hover:bg-primary-light text-white px-4 py-2.5 rounded-lg transition-colors text-center">
+                    Comenzar gratis
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

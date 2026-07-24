@@ -1,124 +1,97 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFinanceStore } from "@/lib/store";
+import { useAuthStore } from "@/lib/auth";
+import { api } from "@/lib/api";
 import { TransactionType } from "@/types";
-
-const mockTransactions = [
-  {
-    id: "1",
-    amount: 350000,
-    type: TransactionType.INCOME,
-    description: "Salario mensual",
-    date: "2026-07-01",
-    categoryId: "1",
-    category: { id: "1", name: "Salario", color: "#22c55e", icon: "💰" },
-    userId: "1",
-    createdAt: "2026-07-01",
-    updatedAt: "2026-07-01",
-  },
-  {
-    id: "2",
-    amount: 15000,
-    type: TransactionType.EXPENSE,
-    description: "Supermercado",
-    date: "2026-07-05",
-    categoryId: "2",
-    category: { id: "2", name: "Comida", color: "#f97316", icon: "🍔" },
-    userId: "1",
-    createdAt: "2026-07-05",
-    updatedAt: "2026-07-05",
-  },
-  {
-    id: "3",
-    amount: 5000,
-    type: TransactionType.EXPENSE,
-    description: "Uber",
-    date: "2026-07-10",
-    categoryId: "3",
-    category: { id: "3", name: "Transporte", color: "#3b82f6", icon: "🚗" },
-    userId: "1",
-    createdAt: "2026-07-10",
-    updatedAt: "2026-07-10",
-  },
-];
+import TransactionForm from "./TransactionForm";
+import BalanceCards from "./BalanceCards";
+import CategoryDonutChart from "./CategoryDonutChart";
+import MonthlyTrendChart from "./MonthlyTrendChart";
+import TransactionList from "./TransactionList";
 
 export default function DashboardTab() {
-  const { transactions, setTransactions } = useFinanceStore();
+  const { transactions, setTransactions, stats, setStats } = useFinanceStore();
+  const { token } = useAuthStore();
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    setTransactions(mockTransactions);
-  }, [setTransactions]);
+    if (!token) return;
+    const fetchData = async () => {
+      try {
+        const [txns, statsData] = await Promise.all([
+          api.transactions.getAll(),
+          api.transactions.getStats(),
+        ]);
+        setTransactions(txns);
+        setStats(statsData);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [token, setTransactions, setStats]);
 
-  const balance = transactions.reduce((acc, t) => {
-    return t.type === TransactionType.INCOME ? acc + t.amount : acc - t.amount;
-  }, 0);
-
+  const balance = stats?.balance ?? 0;
   const income = transactions
     .filter((t) => t.type === TransactionType.INCOME)
-    .reduce((acc, t) => acc + t.amount, 0);
-
+    .reduce((acc, t) => acc + Number(t.amount), 0);
   const expenses = transactions
     .filter((t) => t.type === TransactionType.EXPENSE)
-    .reduce((acc, t) => acc + t.amount, 0);
+    .reduce((acc, t) => acc + Number(t.amount), 0);
+
+  const donutData = stats
+    ? Object.entries(stats.expensesByCategory).map(([name, value]) => ({
+        name,
+        value,
+      }))
+    : [];
+
+  const trendData = stats
+    ? Object.entries(stats.monthlyTrend)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([month, data]) => ({
+          month: month.slice(5),
+          ingresos: data.income,
+          gastos: data.expense,
+        }))
+    : [];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
-        <div className="bg-card rounded-xl p-4 sm:p-6 border border-card-border">
-          <h3 className="text-xs sm:text-sm font-medium text-muted">Balance Actual</h3>
-          <p className={`text-2xl sm:text-3xl font-bold mt-1 sm:mt-2 ${balance >= 0 ? "text-green-400" : "text-red-400"}`}>
-            ${balance.toLocaleString()}
-          </p>
-        </div>
-        <div className="bg-card rounded-xl p-4 sm:p-6 border border-card-border">
-          <h3 className="text-xs sm:text-sm font-medium text-muted">Ingresos</h3>
-          <p className="text-2xl sm:text-3xl font-bold mt-1 sm:mt-2 text-green-400">
-            ${income.toLocaleString()}
-          </p>
-        </div>
-        <div className="bg-card rounded-xl p-4 sm:p-6 border border-card-border">
-          <h3 className="text-xs sm:text-sm font-medium text-muted">Gastos</h3>
-          <p className="text-2xl sm:text-3xl font-bold mt-1 sm:mt-2 text-red-400">
-            ${expenses.toLocaleString()}
-          </p>
-        </div>
+      {showForm && <TransactionForm onClose={() => setShowForm(false)} />}
+
+      <BalanceCards balance={balance} income={income} expenses={expenses} />
+
+      <div className="flex justify-end">
+        <button
+          onClick={() => setShowForm(true)}
+          className="px-4 py-2 bg-primary hover:bg-primary-light text-white rounded-xl text-sm font-medium transition-all cursor-pointer"
+        >
+          + Nueva transaccion
+        </button>
       </div>
 
-      <div className="bg-card rounded-xl p-4 sm:p-6 border border-card-border">
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Transacciones recientes</h3>
-        <div className="space-y-3 sm:space-y-4">
-          {transactions.map((t) => (
-            <div
-              key={t.id}
-              className="flex items-center justify-between p-3 sm:p-4 bg-background rounded-lg border border-card-border"
-            >
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-lg"
-                  style={{ backgroundColor: t.category?.color || "#6366f1" }}
-                >
-                  {t.category?.icon || "💵"}
-                </div>
-                <div>
-                  <p className="text-sm sm:font-medium">{t.description}</p>
-                  <p className="text-xs sm:text-sm text-muted">{t.category?.name}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p
-                  className={`text-sm sm:font-semibold ${
-                    t.type === TransactionType.INCOME ? "text-green-400" : "text-red-400"
-                  }`}
-                >
-                  {t.type === TransactionType.INCOME ? "+" : "-"}${t.amount.toLocaleString()}
-                </p>
-                <p className="text-xs sm:text-sm text-muted">{t.date}</p>
-              </div>
-            </div>
-          ))}
+      {donutData.length > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <CategoryDonutChart data={donutData} />
+          <MonthlyTrendChart data={trendData} />
         </div>
-      </div>
+      )}
+
+      <TransactionList transactions={transactions} />
     </>
   );
 }

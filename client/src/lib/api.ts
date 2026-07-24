@@ -41,6 +41,17 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ email, name, password }),
       }),
+    getMe: () => fetchApi<any>("/auth/me"),
+    updateProfile: (data: { name?: string; email?: string }) =>
+      fetchApi<any>("/auth/me", {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+    changePassword: (data: { currentPassword: string; newPassword: string }) =>
+      fetchApi<any>("/auth/me/password", {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
   },
   transactions: {
     getAll: (params?: { startDate?: string; endDate?: string; categoryId?: string }) => {

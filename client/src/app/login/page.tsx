@@ -4,15 +4,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/auth";
 
 const loginSchema = z.object({
-  email: z.string().email("Email inválido"),
-  password: z.string().min(6, "Mínimo 6 caracteres"),
+  email: z.string().email("Email invalido"),
+  password: z.string().min(6, "Minimo 6 caracteres"),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { login, loading, error, clearError } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -21,8 +25,11 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginForm) => {
-    console.log("Login:", data);
+  const onSubmit = async (data: LoginForm) => {
+    try {
+      await login(data.email, data.password);
+      router.push("/dashboard");
+    } catch {}
   };
 
   return (
@@ -36,11 +43,23 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold mb-2">Bienvenido de vuelta</h1>
           <p className="text-muted text-sm">
-            Inicia sesión para acceder a tu panel
+            Inicia sesion para acceder a tu panel
           </p>
         </div>
 
         <div className="bg-card border border-card-border rounded-2xl p-6 sm:p-8">
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+              {error}
+              <button
+                onClick={clearError}
+                className="ml-2 text-red-400 hover:text-red-300 cursor-pointer"
+              >
+                x
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="block text-sm font-medium mb-1.5">Email</label>
@@ -76,15 +95,16 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full py-2.5 cursor-pointer bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
+              disabled={loading}
+              className="w-full py-2.5 cursor-pointer bg-primary hover:bg-primary-light disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
             >
-              Iniciar sesión
+              {loading ? "Iniciando sesion..." : "Iniciar sesion"}
             </button>
           </form>
 
           <div className="mt-6 pt-5 border-t border-card-border text-center">
             <p className="text-muted text-sm">
-              ¿No tienes cuenta?{" "}
+              No tienes cuenta?{" "}
               <Link
                 href="/register"
                 className="text-primary hover:text-primary-light transition-colors font-medium"

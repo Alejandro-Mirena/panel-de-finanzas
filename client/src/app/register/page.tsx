@@ -4,22 +4,26 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/auth";
 
 const registerSchema = z
   .object({
-    name: z.string().min(2, "Mínimo 2 caracteres"),
-    email: z.string().email("Email inválido"),
-    password: z.string().min(6, "Mínimo 6 caracteres"),
+    name: z.string().min(2, "Minimo 2 caracteres"),
+    email: z.string().email("Email invalido"),
+    password: z.string().min(6, "Minimo 6 caracteres"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Las contraseñas no coinciden",
+    message: "Las contrasenas no coinciden",
     path: ["confirmPassword"],
   });
 
 type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { register: registerUser, loading, error, clearError } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -28,8 +32,11 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterForm) => {
-    console.log("Register:", data);
+  const onSubmit = async (data: RegisterForm) => {
+    try {
+      await registerUser(data.email, data.name, data.password);
+      router.push("/dashboard");
+    } catch {}
   };
 
   return (
@@ -48,6 +55,18 @@ export default function RegisterPage() {
         </div>
 
         <div className="bg-card border border-card-border rounded-2xl p-6 sm:p-8">
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+              {error}
+              <button
+                onClick={clearError}
+                className="ml-2 text-red-400 hover:text-red-300 cursor-pointer"
+              >
+                x
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="block text-sm font-medium mb-1.5">Nombre</label>
@@ -115,20 +134,21 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              className="w-full py-2.5 cursor-pointer bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
+              disabled={loading}
+              className="w-full py-2.5 cursor-pointer bg-primary hover:bg-primary-light disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all hover:scale-[1.02]"
             >
-              Crear cuenta
+              {loading ? "Creando cuenta..." : "Crear cuenta"}
             </button>
           </form>
 
           <div className="mt-6 pt-5 border-t border-card-border text-center">
             <p className="text-muted text-sm">
-              ¿Ya tienes cuenta?{" "}
+              Ya tienes cuenta?{" "}
               <Link
                 href="/login"
                 className="text-primary hover:text-primary-light transition-colors font-medium"
               >
-                Iniciá sesión
+                Inicia sesion
               </Link>
             </p>
           </div>
