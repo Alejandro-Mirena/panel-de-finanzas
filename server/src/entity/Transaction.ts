@@ -18,37 +18,37 @@ export enum TransactionType {
 @Entity("transactions")
 export class Transaction {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column({ type: "decimal", precision: 10, scale: 2 })
-  amount: number;
+  amount!: number;
 
   @Column({ type: "enum", enum: TransactionType })
-  type: TransactionType;
+  type!: TransactionType;
 
   @Column()
-  description: string;
+  description!: string;
 
   @Column({ type: "date" })
-  date: Date;
+  date!: Date;
 
   @ManyToOne(() => User, (user) => user.transactions)
   @JoinColumn({ name: "userId" })
-  user: User;
+  user!: User;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => Category, (category) => category.transactions)
   @JoinColumn({ name: "categoryId" })
-  category: Category;
+  category!: Category;
 
   @Column()
-  categoryId: string;
+  categoryId!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

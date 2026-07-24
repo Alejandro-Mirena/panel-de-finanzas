@@ -4,10 +4,10 @@ import { Category } from "../entity/Category";
 import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
-const categoryRepository = AppDataSource.getRepository(Category);
 
 router.get("/", async (req: Request, res: Response) => {
   try {
+    const categoryRepository = AppDataSource.getRepository(Category);
     const categories = await categoryRepository.find();
     res.json(categories);
   } catch (error) {
@@ -18,6 +18,11 @@ router.get("/", async (req: Request, res: Response) => {
 router.post("/", authMiddleware, async (req: Request, res: Response) => {
   try {
     const { name, color, icon } = req.body;
+    const categoryRepository = AppDataSource.getRepository(Category);
+
+    if (!name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
 
     const category = categoryRepository.create({ name, color, icon });
     await categoryRepository.save(category);

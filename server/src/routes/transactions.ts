@@ -4,7 +4,6 @@ import { Transaction, TransactionType } from "../entity/Transaction";
 import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
-const transactionRepository = AppDataSource.getRepository(Transaction);
 
 router.use(authMiddleware);
 
@@ -12,13 +11,16 @@ router.get("/", async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
     const { startDate, endDate, categoryId } = req.query;
+    const transactionRepository = AppDataSource.getRepository(Transaction);
 
     const where: any = { userId };
 
     if (startDate && endDate) {
-      where.date = new Date(startDate as string) <= new Date(endDate as string)
-        ? { $gte: new Date(startDate as string), $lte: new Date(endDate as string) }
-        : undefined;
+      const start = new Date(startDate as string);
+      const end = new Date(endDate as string);
+      if (start <= end) {
+        where.date = { $gte: start, $lte: end };
+      }
     }
 
     if (categoryId) {
@@ -27,7 +29,7 @@ router.get("/", async (req: Request, res: Response) => {
 
     const transactions = await transactionRepository.find({
       where,
-      relations: ["category"],
+      relations: { category: true },
       order: { date: "DESC" },
     });
 
@@ -41,6 +43,11 @@ router.post("/", async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
     const { amount, type, description, date, categoryId } = req.body;
+    const transactionRepository = AppDataSource.getRepository(Transaction);
+
+    if (!amount || !type || !description || !date || !categoryId) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     const transaction = transactionRepository.create({
       amount,
@@ -63,9 +70,10 @@ router.put("/:id", async (req: Request, res: Response) => {
     const userId = (req as any).userId;
     const { id } = req.params;
     const { amount, type, description, date, categoryId } = req.body;
+    const transactionRepository = AppDataSource.getRepository(Transaction);
 
     const transaction = await transactionRepository.findOne({
-      where: { id, userId },
+      where: { id: id as string, userId },
     });
 
     if (!transaction) {
@@ -89,9 +97,10 @@ router.delete("/:id", async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
     const { id } = req.params;
+    const transactionRepository = AppDataSource.getRepository(Transaction);
 
     const transaction = await transactionRepository.findOne({
-      where: { id, userId },
+      where: { id: id as string, userId },
     });
 
     if (!transaction) {
@@ -108,20 +117,23 @@ router.delete("/:id", async (req: Request, res: Response) => {
 router.get("/stats", async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
+    const transactionRepository = AppDataSource.getRepository(Transaction);
 
     const transactions = await transactionRepository.find({
       where: { userId },
-      relations: ["category"],
+      relations: { category: true },
     });
 
     const balance = transactions.reduce((acc, t) => {
-      return t.type === TransactionType.INCOME ? acc + Number(t.amount) : acc - Number(t.amount);
+      return t.type === TransactionType.INCOME
+        ? acc + Number(t.amount)
+        : acc - Number(t.amount);
     }, 0);
 
     const expensesByCategory = transactions
       .filter((t) => t.type === TransactionType.EXPENSE)
       .reduce((acc, t) => {
-        const categoryName = t.category?.name || "Sin categoría";
+        const categoryName = t.category?.name || "Sin categoria";
         acc[categoryName] = (acc[categoryName] || 0) + Number(t.amount);
         return acc;
       }, {} as Record<string, number>);

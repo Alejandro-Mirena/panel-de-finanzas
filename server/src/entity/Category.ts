@@ -9,17 +9,17 @@ import { Transaction } from "./Transaction";
 @Entity("categories")
 export class Category {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ default: "#6366f1" })
-  color: string;
+  color!: string;
 
   @Column({ nullable: true })
-  icon: string;
+  icon!: string;
 
   @OneToMany(() => Transaction, (transaction) => transaction.category)
-  transactions: Transaction[];
+  transactions!: Transaction[];
 }
