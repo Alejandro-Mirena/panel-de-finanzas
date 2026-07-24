@@ -30,10 +30,13 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-4">
           <Link href="/login" className="text-sm text-muted hover:text-foreground transition-colors">
-            Iniciar sesión
+            Iniciar sesion
           </Link>
           <Link href="/register" className="text-sm bg-primary hover:bg-primary-light text-white px-4 py-2 rounded-lg transition-colors">
             Comenzar gratis
+          </Link>
+          <Link href="/dashboard" className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm hover:bg-primary/30 transition-colors" title="Mi perfil">
+            👨‍💻
           </Link>
         </div>
 
@@ -68,10 +71,14 @@ export default function Navbar() {
             </a>
             <div className="pt-3 border-t border-card-border space-y-3">
               <Link href="/login" onClick={() => setMenuOpen(false)} className="block text-sm text-muted hover:text-foreground transition-colors py-2">
-                Iniciar sesión
+                Iniciar sesion
               </Link>
               <Link href="/register" onClick={() => setMenuOpen(false)} className="block text-sm bg-primary hover:bg-primary-light text-white px-4 py-2.5 rounded-lg transition-colors text-center">
                 Comenzar gratis
+              </Link>
+              <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors py-2">
+                <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs">👨‍💻</span>
+                Mi perfil
               </Link>
             </div>
           </div>
