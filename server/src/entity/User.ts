@@ -13,13 +13,13 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ unique: true })
+  @Column({ type: "varchar", unique: true })
   email!: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   name!: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   password!: string;
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)

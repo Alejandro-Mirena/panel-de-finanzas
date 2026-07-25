@@ -26,7 +26,7 @@ export class Transaction {
   @Column({ type: "enum", enum: TransactionType })
   type!: TransactionType;
 
-  @Column()
+  @Column({ type: "varchar" })
   description!: string;
 
   @Column({ type: "date" })
@@ -36,14 +36,14 @@ export class Transaction {
   @JoinColumn({ name: "userId" })
   user!: User;
 
-  @Column()
+  @Column({ type: "varchar" })
   userId!: string;
 
   @ManyToOne(() => Category, (category) => category.transactions)
   @JoinColumn({ name: "categoryId" })
   category!: Category;
 
-  @Column()
+  @Column({ type: "varchar" })
   categoryId!: string;
 
   @CreateDateColumn()

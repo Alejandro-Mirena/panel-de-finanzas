@@ -11,13 +11,13 @@ export class Category {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   name!: string;
 
-  @Column({ default: "#6366f1" })
+  @Column({ type: "varchar", default: "#6366f1" })
   color!: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   icon!: string;
 
   @OneToMany(() => Transaction, (transaction) => transaction.category)
