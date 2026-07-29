@@ -6,6 +6,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/auth";
+import PasswordInput from "@/components/common/PasswordInput";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalido"),
@@ -80,17 +81,10 @@ export default function LoginPage() {
               <label className="block text-sm font-medium mb-1.5">
                 Contraseña
               </label>
-              <input
-                type="password"
-                {...register("password")}
-                placeholder="••••••••"
-                className="w-full px-4 py-2.5 bg-background border border-card-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+              <PasswordInput
+                registration={register("password")}
+                error={errors.password?.message}
               />
-              {errors.password && (
-                <p className="text-red-400 text-xs mt-1">
-                  {errors.password.message}
-                </p>
-              )}
             </div>
 
             <button

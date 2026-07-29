@@ -10,16 +10,18 @@ type Tab = "dashboard" | "profile";
 
 export default function Dashboard() {
   const [tab, setTab] = useState<Tab>("dashboard");
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const { token, user } = useAuthStore();
 
   useEffect(() => {
+    setMounted(true);
     if (!token) {
       router.push("/login");
     }
   }, [token, router]);
 
-  if (!token) {
+  if (!mounted || !token) {
     return null;
   }
 

@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { useAuthStore } from "@/lib/auth";
 import { api } from "@/lib/api";
+import PasswordInput from "@/components/common/PasswordInput";
 
 export default function PasswordForm() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const handleChange = async () => {
     setSaving(true);
@@ -19,7 +23,10 @@ export default function PasswordForm() {
       setNewPassword("");
       setMessage({ type: "success", text: "Contrasena actualizada" });
     } catch (err: any) {
-      setMessage({ type: "error", text: err.message || "Error al cambiar contrasena" });
+      setMessage({
+        type: "error",
+        text: err.message || "Error al cambiar contrasena",
+      });
     } finally {
       setSaving(false);
     }
@@ -36,30 +43,35 @@ export default function PasswordForm() {
           }`}
         >
           {message.text}
-          <button onClick={() => setMessage(null)} className="ml-2 hover:opacity-70 cursor-pointer">x</button>
+          <button
+            onClick={() => setMessage(null)}
+            className="ml-2 hover:opacity-70 cursor-pointer"
+          >
+            x
+          </button>
         </div>
       )}
 
-      <h3 className="text-base sm:text-lg font-semibold mb-4">Cambiar contrasena</h3>
+      <h3 className="text-base sm:text-lg font-semibold mb-4">
+        Cambiar contraseña
+      </h3>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1.5">Contrasena actual</label>
-          <input
-            type="password"
+          <label className="block text-sm font-medium mb-1.5">
+            Contraseña actual
+          </label>
+          <PasswordInput
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="••••••••"
-            className="w-full px-4 py-2.5 bg-background border border-card-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1.5">Nueva contrasena</label>
-          <input
-            type="password"
+          <label className="block text-sm font-medium mb-1.5">
+            Nueva contrasena
+          </label>
+          <PasswordInput
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="••••••••"
-            className="w-full px-4 py-2.5 bg-background border border-card-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
           />
         </div>
         <div className="flex justify-end">
