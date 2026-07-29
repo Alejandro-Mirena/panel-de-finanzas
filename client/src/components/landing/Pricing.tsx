@@ -1,5 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useAuthStore } from "@/lib/auth";
+
 const plans = [
   {
     name: "Gratis",
@@ -34,6 +37,11 @@ const plans = [
 ];
 
 export default function Pricing() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const { token } = useAuthStore();
+  const link = mounted && token ? "/dashboard" : "/register";
+
   return (
     <section id="pricing" className="py-20 sm:py-32 relative">
       <div className="absolute inset-0 overflow-hidden">
@@ -87,7 +95,7 @@ export default function Pricing() {
               </ul>
 
               <a
-                href="/register"
+                href={link}
                 className={`block w-full text-center py-2.5 sm:py-3 rounded-xl font-medium transition-all text-sm sm:text-base ${
                   plan.highlighted
                     ? "bg-primary hover:bg-primary-light text-white"

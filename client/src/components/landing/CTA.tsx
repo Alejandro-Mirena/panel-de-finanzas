@@ -1,6 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useAuthStore } from "@/lib/auth";
+
 export default function CTA() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const { token } = useAuthStore();
+  const link = mounted && token ? "/dashboard" : "/register";
+
   return (
     <section className="py-20 sm:py-32 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
@@ -18,7 +26,7 @@ export default function CTA() {
               minutos vas a entender donde va tu dinero.
             </p>
             <a
-              href="/register"
+              href={link}
               className="inline-block px-8 sm:px-10 py-3 sm:py-4 bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-105 glow text-base sm:text-lg"
             >
               Comenzar ahora

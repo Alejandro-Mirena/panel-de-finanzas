@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useAuthStore } from "@/lib/auth";
+
 const tags = [
   { label: "Comida", color: "bg-orange-500/20 text-orange-400" },
   { label: "Transporte", color: "bg-blue-500/20 text-blue-400" },
@@ -10,6 +14,11 @@ const tags = [
 ];
 
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const { token } = useAuthStore();
+  const link = mounted && token ? "/dashboard" : "/register";
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
@@ -44,7 +53,7 @@ export default function Hero() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-in-up animate-delay-2">
           <a
-            href="/register"
+            href={link}
             className="w-full sm:w-auto px-8 py-3.5 bg-primary hover:bg-primary-light text-white rounded-xl font-medium transition-all hover:scale-105 glow"
           >
             Comenzar gratis
