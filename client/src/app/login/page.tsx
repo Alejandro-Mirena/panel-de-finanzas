@@ -6,6 +6,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/auth";
+import { useToastStore } from "@/lib/toast";
 import PasswordInput from "@/components/common/PasswordInput";
 
 const loginSchema = z.object({
@@ -18,6 +19,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const router = useRouter();
   const { login, loading, error, clearError } = useAuthStore();
+  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -29,6 +31,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginForm) => {
     try {
       await login(data.email, data.password);
+      addToast({ type: "success", title: "login", message: "Bienvenido de vuelta" });
       router.push("/dashboard");
     } catch {}
   };

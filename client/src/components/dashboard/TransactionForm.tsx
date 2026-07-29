@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { api } from "@/lib/api";
 import { useFinanceStore } from "@/lib/store";
-import { Category, TransactionType } from "@/types";
+import { useToastStore } from "@/lib/toast";
+import { Category } from "@/types";
 
 const transactionSchema = z.object({
   amount: z.number().min(0.01, "El monto debe ser mayor a 0"),
@@ -25,8 +26,8 @@ interface Props {
 export default function TransactionForm({ onClose }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { addTransaction } = useFinanceStore();
+  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -45,7 +46,6 @@ export default function TransactionForm({ onClose }: Props) {
 
   const onSubmit = async (data: TransactionForm) => {
     setLoading(true);
-    setError(null);
     try {
       const transaction = await api.transactions.create(data);
       const fullTransaction = {
@@ -53,9 +53,16 @@ export default function TransactionForm({ onClose }: Props) {
         category: categories.find((c) => c.id === data.categoryId),
       };
       addTransaction(fullTransaction);
+      addToast({
+        type: data.type === "income" ? "success" : "error",
+        title: data.type === "income" ? "income" : "expense",
+        message: data.type === "income"
+          ? `Ingreso de $${Number(data.amount).toLocaleString()} registrado`
+          : `Gasto de $${Number(data.amount).toLocaleString()} registrado`,
+      });
       onClose();
     } catch (err: any) {
-      setError(err.message || "Error al crear transaccion");
+      addToast({ type: "error", title: "error", message: err.message || "Error al crear transaccion" });
     } finally {
       setLoading(false);
     }
@@ -73,12 +80,6 @@ export default function TransactionForm({ onClose }: Props) {
             </svg>
           </button>
         </div>
-
-        {error && (
-          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>

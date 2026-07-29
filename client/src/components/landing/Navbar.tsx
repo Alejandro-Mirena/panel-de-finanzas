@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/auth";
+import { useToastStore } from "@/lib/toast";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,6 +12,7 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { user, token, logout, fetchUser } = useAuthStore();
+  const { addToast } = useToastStore();
 
   useEffect(() => {
     if (token && !user) {
@@ -30,6 +32,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
+    addToast({ type: "info", title: "Sesion cerrada", message: "Hasta luego" });
     setMenuOpen(false);
     setDropdownOpen(false);
     router.push("/");

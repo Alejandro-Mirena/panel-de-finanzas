@@ -1,6 +1,18 @@
 "use client";
 
+import { useToastStore } from "@/lib/toast";
+
 export default function DangerZone() {
+  const { addToast } = useToastStore();
+
+  const handleDeactivate = () => {
+    addToast({ type: "warning", title: "deactivate", message: "Cuenta desactivada. Para recuperarla, contacta a soporte." });
+  };
+
+  const handleDelete = () => {
+    addToast({ type: "error", title: "delete", message: "Cuenta eliminada definitivamente." });
+  };
+
   return (
     <div className="bg-card border border-red-500/30 rounded-2xl p-5 sm:p-8">
       <h3 className="text-base sm:text-lg font-semibold text-red-400 mb-2">
@@ -10,10 +22,16 @@ export default function DangerZone() {
         Estas acciones son irreversibles. Ten cuidado.
       </p>
       <div className="flex flex-col sm:flex-row gap-3">
-        <button className="cursor-pointer px-4 py-2 text-sm border border-card-border rounded-lg hover:bg-card transition-colors">
+        <button
+          onClick={handleDeactivate}
+          className="cursor-pointer px-4 py-2 text-sm border border-card-border rounded-lg hover:bg-card transition-colors"
+        >
           Desactivar cuenta
         </button>
-        <button className="cursor-pointer px-4 py-2 text-sm border border-red-500/50 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors">
+        <button
+          onClick={handleDelete}
+          className="cursor-pointer px-4 py-2 text-sm border border-red-500/50 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors"
+        >
           Eliminar cuenta
         </button>
       </div>

@@ -3,6 +3,7 @@
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import ToastContainer from "@/components/common/ToastContainer";
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -11,6 +12,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       <main className="pt-16">{children}</main>
       <Footer />
       <ScrollToTop />
+      <ToastContainer />
     </>
   );
 }

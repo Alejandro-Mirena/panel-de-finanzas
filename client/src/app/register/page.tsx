@@ -6,6 +6,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/auth";
+import { useToastStore } from "@/lib/toast";
 import PasswordInput from "@/components/common/PasswordInput";
 
 const registerSchema = z
@@ -25,6 +26,7 @@ type RegisterForm = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const router = useRouter();
   const { register: registerUser, loading, error, clearError } = useAuthStore();
+  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -36,6 +38,7 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterForm) => {
     try {
       await registerUser(data.email, data.name, data.password);
+      addToast({ type: "success", title: "register", message: "Cuenta creada con exito" });
       router.push("/dashboard");
     } catch {}
   };
