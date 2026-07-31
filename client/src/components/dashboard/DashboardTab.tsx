@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFinanceStore } from "@/lib/store";
 import { useAuthStore } from "@/lib/auth";
 import { api } from "@/lib/api";
@@ -16,6 +16,7 @@ export default function DashboardTab() {
   const { token } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const firstLoad = useRef(true);
 
   useEffect(() => {
     if (!token) return;
@@ -27,6 +28,7 @@ export default function DashboardTab() {
         ]);
         setTransactions(txns);
         setStats(statsData);
+        firstLoad.current = false;
       } catch (err) {
         console.error("Error fetching data:", err);
       } finally {
@@ -35,6 +37,14 @@ export default function DashboardTab() {
     };
     fetchData();
   }, [token, setTransactions, setStats]);
+
+  useEffect(() => {
+    if (!token || firstLoad.current) return;
+    api.transactions
+      .getStats()
+      .then(setStats)
+      .catch((err) => console.error("Error refreshing stats:", err));
+  }, [transactions, token, setStats]);
 
   const balance = stats?.balance ?? 0;
   const income = transactions
