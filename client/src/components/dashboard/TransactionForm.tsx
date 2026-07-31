@@ -48,6 +48,14 @@ export default function TransactionForm({ onClose }: Props) {
     api.categories.getAll().then(setCategories).catch(console.error);
   }, []);
 
+  useEffect(() => {
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, []);
+
   const onSubmit = async (data: TransactionFormData) => {
     setLoading(true);
     try {
@@ -78,96 +86,98 @@ export default function TransactionForm({ onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-md max-h-[calc(100vh-2rem)] bg-card border border-card-border rounded-2xl p-6 sm:p-6 flex flex-col overflow-y-auto scrollbar-thin">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-semibold">Nueva transaccion</h2>
-          <button
-            onClick={onClose}
-            className="text-muted hover:text-foreground cursor-pointer"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-6 sm:pt-8">
+      <div className="fixed inset-0 bg-black/60" onClick={onClose} />
+      <div className="relative z-10 w-full max-w-md max-h-[calc(100vh-3rem)] bg-card border border-card-border rounded-2xl flex flex-col overflow-y-auto overflow-x-hidden scrollbar-thin">
+        <div className="p-5 sm:p-6 flex flex-col">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-semibold">Nueva transaccion</h2>
+            <button
+              onClick={onClose}
+              className="text-muted hover:text-foreground cursor-pointer"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <TransactionTypeSelector register={register} value={type} />
-
-          <div
-            className={`flex items-center gap-2 px-4 py-3 rounded-xl border bg-background transition-colors ${accent}`}
-          >
-            <span className="text-2xl text-muted">
-              {type === "income" ? "+" : "-"}
-            </span>
-            <input
-              type="number"
-              step="0.01"
-              placeholder="0.00"
-              autoFocus
-              inputMode="decimal"
-              {...register("amount", { valueAsNumber: true })}
-              className="w-full bg-transparent text-3xl sm:text-4xl font-bold outline-none placeholder:text-muted/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
-          {errors.amount?.message && (
-            <p className="text-red-400 text-xs -mt-3">
-              {errors.amount.message}
-            </p>
-          )}
 
-          <FormField
-            label="Descripcion"
-            placeholder="Ej: Supermercado"
-            registration={register("description")}
-            error={errors.description?.message}
-          />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <TransactionTypeSelector register={register} value={type} />
 
-          <FormField
-            label="Fecha"
-            type="date"
-            registration={register("date")}
-            error={errors.date?.message}
-          />
+            <div
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl border bg-background transition-colors ${accent}`}
+            >
+              <span className="text-2xl text-muted">
+                {type === "income" ? "+" : "-"}
+              </span>
+              <input
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                autoFocus
+                inputMode="decimal"
+                {...register("amount", { valueAsNumber: true })}
+                className="w-full min-w-0 bg-transparent text-3xl sm:text-4xl font-bold outline-none placeholder:text-muted/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+            </div>
+            {errors.amount?.message && (
+              <p className="text-red-400 text-xs -mt-3">
+                {errors.amount.message}
+              </p>
+            )}
 
-          <CategoryGrid
-            categories={categories}
-            register={register}
-            error={errors.categoryId?.message}
-          />
+            <FormField
+              label="Descripcion"
+              placeholder="Ej: Supermercado"
+              registration={register("description")}
+              error={errors.description?.message}
+            />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 rounded-xl text-white text-sm font-semibold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${cta}`}
-          >
-            {loading
-              ? "Guardando..."
-              : type === "income"
-                ? "Registrar ingreso"
-                : "Registrar gasto"}
-          </button>
+            <FormField
+              label="Fecha"
+              type="date"
+              registration={register("date")}
+              error={errors.date?.message}
+            />
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full py-2 text-sm text-muted hover:text-foreground transition-colors cursor-pointer"
-          >
-            Cancelar
-          </button>
-        </form>
+            <CategoryGrid
+              categories={categories}
+              register={register}
+              error={errors.categoryId?.message}
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-3 rounded-xl text-white text-sm font-semibold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${cta}`}
+            >
+              {loading
+                ? "Guardando..."
+                : type === "income"
+                  ? "Registrar ingreso"
+                  : "Registrar gasto"}
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full py-2 text-sm text-muted hover:text-foreground transition-colors cursor-pointer"
+            >
+              Cancelar
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

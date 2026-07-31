@@ -18,7 +18,7 @@ export default function FormField({
   error,
 }: Props) {
   return (
-    <div>
+    <div className="min-w-0">
       <label className="block text-sm font-medium mb-1.5">{label}</label>
       <input
         type={type}
