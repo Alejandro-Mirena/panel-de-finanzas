@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
+import { seedCategories } from "./seed";
 import authRoutes from "./routes/auth";
 import transactionRoutes from "./routes/transactions";
 import categoryRoutes from "./routes/categories";
@@ -20,8 +21,10 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/categories", categoryRoutes);
 
 AppDataSource.initialize()
-  .then(() => {
+  .then(async () => {
     console.log("Database connected");
+
+    await seedCategories();
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
