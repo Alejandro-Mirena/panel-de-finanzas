@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
+import { Transaction } from "../entity/Transaction";
 import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
@@ -59,6 +60,10 @@ router.post("/login", async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    if (!user.active) {
+      return res.status(403).json({ message: "Cuenta desactivada. Contacta a soporte." });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
@@ -152,6 +157,47 @@ router.put("/me/password", authMiddleware, async (req: Request, res: Response) =
     res.json({ message: "Password updated" });
   } catch (error) {
     res.status(500).json({ message: "Error updating password" });
+  }
+});
+
+router.put("/me/deactivate", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const userRepository = AppDataSource.getRepository(User);
+
+    const user = await userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.active = false;
+    await userRepository.save(user);
+
+    res.json({ message: "Cuenta desactivada" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deactivating account" });
+  }
+});
+
+router.delete("/me", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const userRepository = AppDataSource.getRepository(User);
+    const transactionRepository = AppDataSource.getRepository(Transaction);
+
+    const user = await userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await transactionRepository.delete({ userId });
+    await userRepository.remove(user);
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting account" });
   }
 });
 

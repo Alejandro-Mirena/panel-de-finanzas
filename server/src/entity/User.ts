@@ -22,6 +22,9 @@ export class User {
   @Column({ type: "varchar" })
   password!: string;
 
+  @Column({ type: "boolean", default: true })
+  active!: boolean;
+
   @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions!: Transaction[];
 

@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { AppDataSource } from "../data-source";
+import { User } from "../entity/User";
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -14,7 +16,20 @@ export const authMiddleware = (
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret");
-    (req as any).userId = (decoded as any).id;
+    const userId = (decoded as any).id;
+
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    if (!user.active) {
+      return res.status(403).json({ message: "Cuenta desactivada" });
+    }
+
+    (req as any).userId = userId;
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid token" });
