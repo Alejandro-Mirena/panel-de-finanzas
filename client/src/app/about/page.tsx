@@ -1,6 +1,7 @@
+import Image from "next/image";
+
 export default function AboutPage() {
-  return (
-    <div className="min-h-screen bg-background py-16 sm:py-24">
+  return (    <div className="min-h-screen bg-background py-16 sm:py-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 sm:mb-16">
           <p className="text-primary text-sm font-medium mb-4">
@@ -82,8 +83,14 @@ export default function AboutPage() {
             </p>
             <div className="flex justify-center">
               <div className="p-6 sm:p-8 rounded-2xl bg-card border border-card-border text-center max-w-sm w-full">
-                <div className="w-20 h-20 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-4xl mb-4">
-                  👨‍💻
+                <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-primary/30 mb-4">
+                  <Image
+                    src="/foto-Alejandro.jpg"
+                    alt="Foto de Alejandro Mirena"
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <p className="font-semibold text-base mb-1">Alejandro Mirena</p>
                 <p className="text-primary text-sm mb-3">
