@@ -52,6 +52,10 @@ export const api = {
         method: "PUT",
         body: JSON.stringify(data),
       }),
+    deactivate: () =>
+      fetchApi<any>("/auth/me/deactivate", { method: "PUT" }),
+    deleteAccount: () =>
+      fetchApi<void>("/auth/me", { method: "DELETE" }),
   },
   transactions: {
     getAll: (params?: { startDate?: string; endDate?: string; categoryId?: string }) => {
