@@ -87,5 +87,12 @@ export const api = {
         method: "POST",
         body: JSON.stringify(data),
       }),
+    update: (id: string, data: any) =>
+      fetchApi<any>(`/categories/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+    delete: (id: string) =>
+      fetchApi<void>(`/categories/${id}`, { method: "DELETE" }),
   },
 };

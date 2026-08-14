@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/lib/api";
 import { useFinanceStore } from "@/lib/store";
 import { useToastStore } from "@/lib/toast";
-import { Category } from "@/types";
 import { transactionSchema, TransactionFormData } from "@/lib/transaction";
 import FormField from "@/components/common/FormField";
 import TransactionTypeSelector from "./TransactionTypeSelector";
@@ -17,9 +16,8 @@ interface Props {
 }
 
 export default function TransactionForm({ onClose }: Props) {
-  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
-  const { addTransaction } = useFinanceStore();
+  const { categories, setCategories, addTransaction } = useFinanceStore();
   const { addToast } = useToastStore();
   const {
     register,
@@ -45,8 +43,9 @@ export default function TransactionForm({ onClose }: Props) {
       : "bg-expense hover:bg-expense-soft shadow-expense/25";
 
   useEffect(() => {
+    if (categories.length > 0) return;
     api.categories.getAll().then(setCategories).catch(console.error);
-  }, []);
+  }, [categories.length, setCategories]);
 
   useEffect(() => {
     const original = document.body.style.overflow;

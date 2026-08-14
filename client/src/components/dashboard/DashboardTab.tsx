@@ -10,9 +10,16 @@ import BalanceCards from "./BalanceCards";
 import CategoryDonutChart from "./CategoryDonutChart";
 import MonthlyTrendChart from "./MonthlyTrendChart";
 import TransactionList from "./TransactionList";
+import CategoryManager from "./CategoryManager";
 
 export default function DashboardTab() {
-  const { transactions, setTransactions, stats, setStats } = useFinanceStore();
+  const {
+    transactions,
+    setTransactions,
+    stats,
+    setStats,
+    setCategories,
+  } = useFinanceStore();
   const { token } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -22,12 +29,14 @@ export default function DashboardTab() {
     if (!token) return;
     const fetchData = async () => {
       try {
-        const [txns, statsData] = await Promise.all([
+        const [txns, statsData, cats] = await Promise.all([
           api.transactions.getAll(),
           api.transactions.getStats(),
+          api.categories.getAll(),
         ]);
         setTransactions(txns);
         setStats(statsData);
+        setCategories(cats);
         firstLoad.current = false;
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -36,7 +45,7 @@ export default function DashboardTab() {
       }
     };
     fetchData();
-  }, [token, setTransactions, setStats]);
+  }, [token, setTransactions, setStats, setCategories]);
 
   useEffect(() => {
     if (!token || firstLoad.current) return;
@@ -102,6 +111,8 @@ export default function DashboardTab() {
       )}
 
       <TransactionList transactions={transactions} />
+
+      <CategoryManager />
     </>
   );
 }

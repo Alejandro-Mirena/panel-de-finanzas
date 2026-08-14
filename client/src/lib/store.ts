@@ -17,6 +17,9 @@ interface FinanceState {
   addTransaction: (transaction: Transaction) => void;
   updateTransaction: (transaction: Transaction) => void;
   deleteTransaction: (id: string) => void;
+  addCategory: (category: Category) => void;
+  updateCategory: (category: Category) => void;
+  deleteCategory: (id: string) => void;
 }
 
 export const useFinanceStore = create<FinanceState>((set) => ({
@@ -46,5 +49,19 @@ export const useFinanceStore = create<FinanceState>((set) => ({
   deleteTransaction: (id) =>
     set((state) => ({
       transactions: state.transactions.filter((t) => t.id !== id),
+    })),
+  addCategory: (category) =>
+    set((state) => ({
+      categories: [...state.categories, category],
+    })),
+  updateCategory: (category) =>
+    set((state) => ({
+      categories: state.categories.map((c) =>
+        c.id === category.id ? category : c
+      ),
+    })),
+  deleteCategory: (id) =>
+    set((state) => ({
+      categories: state.categories.filter((c) => c.id !== id),
     })),
 }));
