@@ -6,6 +6,9 @@ import { useAuthStore } from "@/lib/auth";
 import { api } from "@/lib/api";
 import { Transaction, TransactionType } from "@/types";
 import TransactionForm from "./transactions/TransactionForm";
+import TransactionFilters, {
+  TransactionFiltersState,
+} from "./transactions/TransactionFilters";
 import BalanceCards from "./charts/BalanceCards";
 import CategoryDonutChart from "./charts/CategoryDonutChart";
 import MonthlyTrendChart from "./charts/MonthlyTrendChart";
@@ -18,12 +21,18 @@ export default function DashboardTab() {
     setTransactions,
     stats,
     setStats,
+    categories,
     setCategories,
   } = useFinanceStore();
   const { token } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Transaction | null>(null);
+  const [filters, setFilters] = useState<TransactionFiltersState>({
+    startDate: "",
+    endDate: "",
+    categoryId: "",
+  });
   const firstLoad = useRef(true);
 
   useEffect(() => {
@@ -55,6 +64,28 @@ export default function DashboardTab() {
       .then(setStats)
       .catch((err) => console.error("Error refreshing stats:", err));
   }, [transactions, token, setStats]);
+
+  const handleFilterChange = async (newFilters: TransactionFiltersState) => {
+    setFilters(newFilters);
+    if (!token) return;
+    const hasFilters =
+      newFilters.startDate || newFilters.endDate || newFilters.categoryId;
+    try {
+      const params = hasFilters
+        ? {
+            ...(newFilters.startDate && { startDate: newFilters.startDate }),
+            ...(newFilters.endDate && { endDate: newFilters.endDate }),
+            ...(newFilters.categoryId && {
+              categoryId: newFilters.categoryId,
+            }),
+          }
+        : undefined;
+      const txns = await api.transactions.getAll(params);
+      setTransactions(txns);
+    } catch (err) {
+      console.error("Error fetching filtered transactions:", err);
+    }
+  };
 
   const balance = stats?.balance ?? 0;
   const income = transactions
@@ -112,6 +143,12 @@ export default function DashboardTab() {
         </button>
       </div>
 
+      <TransactionFilters
+        filters={filters}
+        categories={categories}
+        onChange={handleFilterChange}
+      />
+
       {donutData.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <CategoryDonutChart data={donutData} />
@@ -119,7 +156,11 @@ export default function DashboardTab() {
         </div>
       )}
 
-      <TransactionList transactions={transactions} onEdit={setEditing} />
+      <TransactionList
+        transactions={transactions}
+        hasActiveFilters={!!filters.startDate || !!filters.endDate || !!filters.categoryId}
+        onEdit={setEditing}
+      />
 
       <CategoryManager />
     </>

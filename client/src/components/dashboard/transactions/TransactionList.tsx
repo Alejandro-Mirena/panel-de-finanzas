@@ -8,10 +8,11 @@ import { useToastStore } from "@/lib/toast";
 
 interface Props {
   transactions: Transaction[];
+  hasActiveFilters: boolean;
   onEdit: (transaction: Transaction) => void;
 }
 
-export default function TransactionList({ transactions, onEdit }: Props) {
+export default function TransactionList({ transactions, hasActiveFilters, onEdit }: Props) {
   const { deleteTransaction } = useFinanceStore();
   const { addToast } = useToastStore();
   const [confirmId, setConfirmId] = useState<string | null>(null);
@@ -46,11 +47,13 @@ export default function TransactionList({ transactions, onEdit }: Props) {
       </h3>
       {transactions.length === 0 ? (
         <p className="text-muted text-sm text-center py-8">
-          No hay transacciones aun. Agrega una para empezar.
+          {hasActiveFilters
+            ? "No se encontraron transacciones con estos filtros."
+            : "No hay transacciones aun. Agrega una para empezar."}
         </p>
       ) : (
         <div className="space-y-3 sm:space-y-4">
-          {transactions.slice(0, 10).map((t) => (
+          {transactions.map((t) => (
             <div
               key={t.id}
               className="flex items-center justify-between p-3 sm:p-4 bg-background rounded-lg border border-card-border"
