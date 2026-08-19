@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Transaction, TransactionType } from "../entity/Transaction";
 import { authMiddleware } from "../middleware/auth";
+import { Between } from "typeorm";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get("/", async (req: Request, res: Response) => {
       const start = new Date(startDate as string);
       const end = new Date(endDate as string);
       if (start <= end) {
-        where.date = { $gte: start, $lte: end };
+        where.date = Between(start, end);
       }
     }
 
