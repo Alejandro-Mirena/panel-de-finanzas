@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/auth";
 import DashboardTab from "@/components/dashboard/DashboardTab";
-import ProfileTab from "@/components/dashboard/ProfileTab";
+import ProfileTab from "@/components/dashboard/profile/ProfileTab";
 
 type Tab = "dashboard" | "profile";
 

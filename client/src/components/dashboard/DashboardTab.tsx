@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { useFinanceStore } from "@/lib/store";
 import { useAuthStore } from "@/lib/auth";
 import { api } from "@/lib/api";
-import { TransactionType } from "@/types";
-import TransactionForm from "./TransactionForm";
-import BalanceCards from "./BalanceCards";
-import CategoryDonutChart from "./CategoryDonutChart";
-import MonthlyTrendChart from "./MonthlyTrendChart";
-import TransactionList from "./TransactionList";
-import CategoryManager from "./CategoryManager";
+import { Transaction, TransactionType } from "@/types";
+import TransactionForm from "./transactions/TransactionForm";
+import BalanceCards from "./charts/BalanceCards";
+import CategoryDonutChart from "./charts/CategoryDonutChart";
+import MonthlyTrendChart from "./charts/MonthlyTrendChart";
+import TransactionList from "./transactions/TransactionList";
+import CategoryManager from "./categories/CategoryManager";
 
 export default function DashboardTab() {
   const {
@@ -23,6 +23,7 @@ export default function DashboardTab() {
   const { token } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState<Transaction | null>(null);
   const firstLoad = useRef(true);
 
   useEffect(() => {
@@ -90,7 +91,15 @@ export default function DashboardTab() {
 
   return (
     <>
-      {showForm && <TransactionForm onClose={() => setShowForm(false)} />}
+      {(showForm || editing) && (
+        <TransactionForm
+          transaction={editing}
+          onClose={() => {
+            setShowForm(false);
+            setEditing(null);
+          }}
+        />
+      )}
 
       <BalanceCards balance={balance} income={income} expenses={expenses} />
 
@@ -110,7 +119,7 @@ export default function DashboardTab() {
         </div>
       )}
 
-      <TransactionList transactions={transactions} />
+      <TransactionList transactions={transactions} onEdit={setEditing} />
 
       <CategoryManager />
     </>

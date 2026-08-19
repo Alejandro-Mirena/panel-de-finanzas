@@ -6,19 +6,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/lib/api";
 import { useFinanceStore } from "@/lib/store";
 import { useToastStore } from "@/lib/toast";
+import { Transaction } from "@/types";
 import { transactionSchema, TransactionFormData } from "@/lib/transaction";
 import FormField from "@/components/common/FormField";
 import TransactionTypeSelector from "./TransactionTypeSelector";
 import CategoryGrid from "./CategoryGrid";
 
 interface Props {
+  transaction?: Transaction | null;
   onClose: () => void;
 }
 
-export default function TransactionForm({ onClose }: Props) {
+export default function TransactionForm({ transaction, onClose }: Props) {
   const [loading, setLoading] = useState(false);
-  const { categories, setCategories, addTransaction } = useFinanceStore();
+  const { categories, setCategories, addTransaction, updateTransaction } = useFinanceStore();
   const { addToast } = useToastStore();
+  const isEdit = !!transaction;
   const {
     register,
     handleSubmit,
@@ -27,8 +30,11 @@ export default function TransactionForm({ onClose }: Props) {
   } = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
-      type: "expense",
-      date: new Date().toISOString().split("T")[0],
+      type: transaction?.type || "expense",
+      amount: transaction?.amount || undefined,
+      description: transaction?.description || "",
+      date: transaction?.date?.split("T")[0] || new Date().toISOString().split("T")[0],
+      categoryId: transaction?.categoryId || "",
     },
   });
 
@@ -58,26 +64,39 @@ export default function TransactionForm({ onClose }: Props) {
   const onSubmit = async (data: TransactionFormData) => {
     setLoading(true);
     try {
-      const transaction = await api.transactions.create(data);
+      const result = isEdit
+        ? await api.transactions.update(transaction!.id, data)
+        : await api.transactions.create(data);
+
       const fullTransaction = {
-        ...transaction,
+        ...result,
         category: categories.find((c) => c.id === data.categoryId),
       };
-      addTransaction(fullTransaction);
-      addToast({
-        type: data.type === "income" ? "success" : "error",
-        title: data.type === "income" ? "income" : "expense",
-        message:
-          data.type === "income"
-            ? `Ingreso de $${Number(data.amount).toLocaleString()} registrado`
-            : `Gasto de $${Number(data.amount).toLocaleString()} registrado`,
-      });
+
+      if (isEdit) {
+        updateTransaction(fullTransaction);
+        addToast({
+          type: "info",
+          title: "updated",
+          message: "Transaccion actualizada",
+        });
+      } else {
+        addTransaction(fullTransaction);
+        addToast({
+          type: data.type === "income" ? "success" : "error",
+          title: data.type === "income" ? "income" : "expense",
+          message:
+            data.type === "income"
+              ? `Ingreso de $${Number(data.amount).toLocaleString()} registrado`
+              : `Gasto de $${Number(data.amount).toLocaleString()} registrado`,
+        });
+      }
       onClose();
     } catch (err: any) {
       addToast({
         type: "error",
         title: "error",
-        message: err.message || "Error al crear transaccion",
+        message: err.message || "Error al guardar la transaccion",
       });
     } finally {
       setLoading(false);
@@ -90,7 +109,9 @@ export default function TransactionForm({ onClose }: Props) {
       <div className="relative z-10 w-full max-w-md max-h-[calc(100vh-3rem)] bg-card border border-card-border rounded-2xl flex flex-col overflow-y-auto overflow-x-hidden scrollbar-thin">
         <div className="p-5 sm:p-6 flex flex-col">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-semibold">Nueva transaccion</h2>
+            <h2 className="text-lg font-semibold">
+              {isEdit ? "Editar transaccion" : "Nueva transaccion"}
+            </h2>
             <button
               onClick={onClose}
               className="text-muted hover:text-foreground cursor-pointer"
@@ -163,9 +184,11 @@ export default function TransactionForm({ onClose }: Props) {
             >
               {loading
                 ? "Guardando..."
-                : type === "income"
-                  ? "Registrar ingreso"
-                  : "Registrar gasto"}
+                : isEdit
+                  ? "Guardar cambios"
+                  : type === "income"
+                    ? "Registrar ingreso"
+                    : "Registrar gasto"}
             </button>
 
             <button
